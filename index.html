@@ -1355,6 +1355,14 @@
       </div>
     </div>
 
+    <div class="modal" id="editTransactionModal">
+  <form id="editTransactionForm">
+    <input type="hidden" id="editTransactionId">
+    <!-- input description, amount, date, type, category -->
+  </form>
+</div>
+
+
     <!-- Modal Edit Akun -->
     <div class="modal" id="editAccountModal">
       <div class="modal-content">
@@ -2267,30 +2275,33 @@
         const container = document.getElementById("transactionsTable");
 
         try {
-          const typeFilter = document.getElementById(
-            "transactionTypeFilter"
-          ).value;
+          const typeFilter =
+            document.getElementById("transactionTypeFilter")?.value || "all";
           const categoryFilter =
-            document.getElementById("categoryFilter").value;
-          const monthFilter = document.getElementById("monthFilter").value;
+            document.getElementById("categoryFilter")?.value || "all";
+          const monthFilter =
+            document.getElementById("monthFilter")?.value || "";
 
-          // Filter transactions
+          // Filter by account
           let filteredTransactions = transactions.filter(
             (t) => t.account === currentAccount
           );
 
+          // Filter by type
           if (typeFilter !== "all") {
             filteredTransactions = filteredTransactions.filter(
               (t) => t.type === typeFilter
             );
           }
 
+          // Filter by category
           if (categoryFilter !== "all") {
             filteredTransactions = filteredTransactions.filter(
               (t) => t.category === categoryFilter
             );
           }
 
+          // Filter by month
           if (monthFilter) {
             const [year, month] = monthFilter.split("-");
             filteredTransactions = filteredTransactions.filter((t) => {
@@ -2302,6 +2313,76 @@
             });
           }
 
+          // Sort newest first
+          filteredTransactions.sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+          );
+
+          // Empty state
+          if (filteredTransactions.length === 0) {
+            container.innerHTML = `
+              <tr>
+                <td colspan="6" style="text-align:center;">
+                  Tidak ada transaksi
+                </td>
+              </tr>
+            `;
+            return;
+          }
+
+          // Render table
+          let html = "";
+          filteredTransactions.forEach((transaction) => {
+            html += `
+              <tr>
+                <td>${formatDate(transaction.date)}</td>
+                <td>${transaction.category}</td>
+                <td>${transaction.description}</td>
+                <td>${formatCurrency(transaction.amount)}</td>
+                <td>
+                  <span class="transaction-type type-${transaction.type}">
+                    ${
+                      transaction.type === "income"
+                        ? "Pemasukan"
+                        : "Pengeluaran"
+                    }
+                  </span>
+                </td>
+                <td>
+                  <div class="action-buttons">
+                    <button
+                      class="btn-icon"
+                      title="Edit"
+                      onclick="openEditTransaction('${transaction.id}')"
+                    >
+                      <i class="fas fa-edit"></i>
+                    </button>
+
+                    <button
+                      class="btn-icon"
+                      title="Hapus"
+                      onclick="deleteTransaction('${transaction.id}')"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          });
+
+          container.innerHTML = html;
+        } catch (error) {
+          console.error("Error updating transactions table:", error);
+          container.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align:center;color:red;">
+                Terjadi kesalahan menampilkan data
+              </td>
+            </tr>
+          `;
+        }
+      }
           // Sort by date (newest first)
           filteredTransactions.sort(
             (a, b) => new Date(b.date) - new Date(a.date)
@@ -3610,6 +3691,25 @@
 
         return colors;
       }
+
+      function openEditTransaction(id) {
+  const trx = transactions.find(t => t.id === id);
+  if (!trx) return;
+
+  document.getElementById("editTransactionId").value = trx.id;
+  document.getElementById("description").value = trx.description;
+  document.getElementById("amount").value = trx.amount;
+  document.getElementById("date").value = trx.date;
+
+  document.querySelector(
+    `input[name="type"][value="${trx.type}"]`
+  ).checked = true;
+
+  updateCategoriesDropdown();
+  document.getElementById("category").value = trx.category;
+
+  showModal("editTransactionModal");
+}
     </script>
 
     <script>
