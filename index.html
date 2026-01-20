@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FinTrack - Pencatatan Keuangan Pribadi</title>
+    <title>FinTrack - Pencatatan Keuangan Sederhana</title>
 
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#ffffff" />
@@ -22,7 +22,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-      /* CSS tetap sama seperti sebelumnya */
+      
       :root {
         --primary-color: #4361ee;
         --primary-dark: #3a56d4;
@@ -1179,7 +1179,7 @@
       <button
         class="fab"
         id="fabButton"
-        onclick="showModal('addTransactionModal')"
+        onclick="showAddTransactionModal()"
       >
         <i class="fas fa-plus"></i>
       </button>
@@ -1226,9 +1226,7 @@
     <div class="modal" id="transactionModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3 class="modal-title" id="transactionModalTitle">
-            Tambah Transaksi Baru
-          </h3>
+          <h3 class="modal-title" id="transactionModalTitle">Tambah Transaksi Baru</h3>
           <button class="close-modal" id="closeTransactionModal">
             &times;
           </button>
@@ -1313,11 +1311,7 @@
             >
               Batal
             </button>
-            <button
-              type="submit"
-              class="btn btn-primary"
-              id="saveTransactionBtn"
-            >
+            <button type="submit" class="btn btn-primary" id="saveTransactionBtn">
               <i class="fas fa-save"></i>
               <span id="saveTransactionText">Simpan Transaksi</span>
             </button>
@@ -1547,7 +1541,7 @@
         updateCategoriesDisplay();
         updateDateFilters();
         updateTheme();
-
+        
         // Initialize chart containers
         initChartContainers();
 
@@ -1593,21 +1587,20 @@
         const barChartContainer = document.getElementById("barChart");
         const pieChartContainer = document.getElementById("pieChart");
         const reportChartContainer = document.getElementById("reportChart");
-
+        
         if (barChartContainer) {
-          barChartContainer.innerHTML = "";
+          barChartContainer.innerHTML = '';
           barChartContainer.innerHTML = '<canvas id="barChartCanvas"></canvas>';
         }
-
+        
         if (pieChartContainer) {
-          pieChartContainer.innerHTML = "";
+          pieChartContainer.innerHTML = '';
           pieChartContainer.innerHTML = '<canvas id="pieChartCanvas"></canvas>';
         }
-
+        
         if (reportChartContainer) {
-          reportChartContainer.innerHTML = "";
-          reportChartContainer.innerHTML =
-            '<canvas id="reportChartCanvas"></canvas>';
+          reportChartContainer.innerHTML = '';
+          reportChartContainer.innerHTML = '<canvas id="reportChartCanvas"></canvas>';
         }
       }
 
@@ -1637,9 +1630,7 @@
 
         // Transaction modal (for add and edit)
         const transactionModal = document.getElementById("transactionModal");
-        const closeTransactionModal = document.getElementById(
-          "closeTransactionModal"
-        );
+        const closeTransactionModal = document.getElementById("closeTransactionModal");
         const cancelTransaction = document.getElementById("cancelTransaction");
         const transactionForm = document.getElementById("transactionForm");
 
@@ -1659,7 +1650,7 @@
         // Update FAB button to open transaction modal for adding
         const fabButton = document.getElementById("fabButton");
         if (fabButton) {
-          fabButton.onclick = function () {
+          fabButton.onclick = function() {
             showAddTransactionModal();
           };
         }
@@ -1735,10 +1726,10 @@
         const modal = document.getElementById("transactionModal");
         const modalTitle = document.getElementById("transactionModalTitle");
         const saveButtonText = document.getElementById("saveTransactionText");
-
+        
         modalTitle.textContent = "Tambah Transaksi Baru";
         saveButtonText.textContent = "Simpan Transaksi";
-
+        
         // Reset form
         document.getElementById("transactionForm").reset();
         document.getElementById("transactionId").value = "";
@@ -1749,13 +1740,13 @@
         updateCategoriesDropdown();
         updateAccountsDropdown();
         document.getElementById("description").focus();
-
+        
         showModal("transactionModal");
       }
 
       // Show edit transaction modal
       function showEditTransactionModal(transactionId) {
-        const transaction = transactions.find((t) => t.id === transactionId);
+        const transaction = transactions.find(t => t.id === transactionId);
         if (!transaction) {
           showToast("Transaksi tidak ditemukan", "error");
           return;
@@ -1764,27 +1755,25 @@
         const modal = document.getElementById("transactionModal");
         const modalTitle = document.getElementById("transactionModalTitle");
         const saveButtonText = document.getElementById("saveTransactionText");
-
+        
         modalTitle.textContent = "Edit Transaksi";
         saveButtonText.textContent = "Update Transaksi";
-
+        
         // Fill form with transaction data
         document.getElementById("transactionId").value = transaction.id;
-        document.querySelector(
-          `input[name="type"][value="${transaction.type}"]`
-        ).checked = true;
+        document.querySelector(`input[name="type"][value="${transaction.type}"]`).checked = true;
         updateCategoriesDropdown();
         document.getElementById("category").value = transaction.category;
         document.getElementById("description").value = transaction.description;
         document.getElementById("amount").value = transaction.amount;
         document.getElementById("date").value = transaction.date;
-
+        
         // Update accounts dropdown and select the transaction's account
         updateAccountsDropdown();
         setTimeout(() => {
           document.getElementById("account").value = transaction.account;
         }, 100);
-
+        
         showModal("transactionModal");
       }
 
@@ -2189,12 +2178,11 @@
       function showToast(message, type = "success") {
         const toast = document.getElementById("toast");
         if (!toast) return;
-
+        
         toast.textContent = message;
-        toast.style.backgroundColor =
-          type === "success" ? "var(--primary-color)" : "var(--danger-color)";
+        toast.style.backgroundColor = type === "success" ? "var(--primary-color)" : "var(--danger-color)";
         toast.style.display = "block";
-
+        
         setTimeout(() => {
           toast.style.display = "none";
         }, 3000);
@@ -2233,7 +2221,7 @@
         if (!accountSelect) return;
 
         accountSelect.innerHTML = "";
-
+        
         accounts.forEach((account) => {
           const option = document.createElement("option");
           option.value = account.id;
@@ -2247,9 +2235,7 @@
 
       // Update categories dropdown
       function updateCategoriesDropdown() {
-        const type =
-          document.querySelector('input[name="type"]:checked')?.value ||
-          "income";
+        const type = document.querySelector('input[name="type"]:checked')?.value || "income";
         const categorySelect = document.getElementById("category");
 
         if (!categorySelect) return;
@@ -2291,24 +2277,10 @@
 
           if (transactionId) {
             // Edit existing transaction
-            editTransaction(transactionId, {
-              type,
-              account,
-              category,
-              description,
-              amount,
-              date,
-            });
+            editTransaction(transactionId, { type, account, category, description, amount, date });
           } else {
             // Add new transaction
-            addNewTransaction({
-              type,
-              account,
-              category,
-              description,
-              amount,
-              date,
-            });
+            addNewTransaction({ type, account, category, description, amount, date });
           }
         } catch (error) {
           console.error("Error saving transaction:", error);
@@ -2334,12 +2306,7 @@
         transactions.push(transaction);
 
         // Update account balance
-        updateAccountBalance(
-          transaction.account,
-          transaction.type,
-          transaction.amount,
-          "add"
-        );
+        updateAccountBalance(transaction.account, transaction.type, transaction.amount, "add");
 
         // Save to storage
         saveTransactionsToStorage();
@@ -2361,16 +2328,14 @@
       // Edit an existing transaction
       function editTransaction(transactionId, newData) {
         // Find transaction
-        const transactionIndex = transactions.findIndex(
-          (t) => t.id === transactionId
-        );
+        const transactionIndex = transactions.findIndex((t) => t.id === transactionId);
         if (transactionIndex === -1) {
           showToast("Transaksi tidak ditemukan", "error");
           return;
         }
 
         const oldTransaction = transactions[transactionIndex];
-
+        
         // Check if account changed
         const accountChanged = oldTransaction.account !== newData.account;
         const typeChanged = oldTransaction.type !== newData.type;
@@ -2379,20 +2344,10 @@
         // If any significant data changed, update account balances
         if (accountChanged || typeChanged || amountChanged) {
           // Remove old transaction from old account balance
-          updateAccountBalance(
-            oldTransaction.account,
-            oldTransaction.type,
-            oldTransaction.amount,
-            "remove"
-          );
-
+          updateAccountBalance(oldTransaction.account, oldTransaction.type, oldTransaction.amount, "remove");
+          
           // Add new transaction to new account balance
-          updateAccountBalance(
-            newData.account,
-            newData.type,
-            newData.amount,
-            "add"
-          );
+          updateAccountBalance(newData.account, newData.type, newData.amount, "add");
         }
 
         // Update transaction data
@@ -2426,8 +2381,10 @@
 
       // Update account balance
       function updateAccountBalance(accountId, type, amount, operation) {
-        const accountIndex = accounts.findIndex((acc) => acc.id === accountId);
-
+        const accountIndex = accounts.findIndex(
+          (acc) => acc.id === accountId
+        );
+        
         if (accountIndex !== -1) {
           if (operation === "add") {
             if (type === "income") {
@@ -2442,11 +2399,9 @@
               accounts[accountIndex].balance += amount;
             }
           }
-
+          
           accounts[accountIndex].lastUpdated = new Date().toISOString();
-          accounts[accountIndex].transactionCount = transactions.filter(
-            (t) => t.account === accountId
-          ).length;
+          accounts[accountIndex].transactionCount = transactions.filter(t => t.account === accountId).length;
           saveAccountsToStorage();
         }
       }
@@ -2468,12 +2423,7 @@
           const transaction = transactions[transactionIndex];
 
           // Update account balance
-          updateAccountBalance(
-            transaction.account,
-            transaction.type,
-            transaction.amount,
-            "remove"
-          );
+          updateAccountBalance(transaction.account, transaction.type, transaction.amount, "remove");
 
           // Remove transaction
           transactions.splice(transactionIndex, 1);
@@ -2497,12 +2447,8 @@
       function updateDashboard() {
         try {
           // Get current account balance
-          const currentAccountObj = accounts.find(
-            (acc) => acc.id === currentAccount
-          );
-          const totalBalance = currentAccountObj
-            ? currentAccountObj.balance
-            : 0;
+          const currentAccountObj = accounts.find(acc => acc.id === currentAccount);
+          const totalBalance = currentAccountObj ? currentAccountObj.balance : 0;
 
           // Filter transactions for current account and current month
           const now = new Date();
@@ -2618,9 +2564,7 @@
           }
 
           if (monthFilter) {
-            const [year, month] = monthFilter
-              .split("-")
-              .map((num) => parseInt(num));
+            const [year, month] = monthFilter.split("-").map(num => parseInt(num));
             if (year && month) {
               filteredTransactions = filteredTransactions.filter((t) => {
                 const transDate = new Date(t.date);
@@ -2631,7 +2575,7 @@
               });
             }
           }
-
+          
           // Sort by date (newest first)
           filteredTransactions.sort(
             (a, b) => new Date(b.date) - new Date(a.date)
@@ -2688,11 +2632,11 @@
 
         try {
           // Get all unique categories from transactions for current account
-          const accountTransactions = transactions.filter(
-            (t) => t.account === currentAccount
-          );
+          const accountTransactions = transactions.filter(t => t.account === currentAccount);
           const allCategories = [
-            ...new Set(accountTransactions.map((t) => t.category)),
+            ...new Set(
+              accountTransactions.map((t) => t.category)
+            ),
           ].sort();
 
           // Save current value
@@ -2752,15 +2696,12 @@
 
           const weekLabels = Object.keys(weeks).sort((a, b) => a - b);
           const incomeData = weekLabels.map((week) => weeks[week].income || 0);
-          const expenseData = weekLabels.map(
-            (week) => weeks[week].expense || 0
-          );
+          const expenseData = weekLabels.map((week) => weeks[week].expense || 0);
 
           // Bar chart
-          const barCtx =
-            document.getElementById("barChart")?.getContext("2d") ||
-            document.getElementById("barChartCanvas")?.getContext("2d");
-
+          const barCtx = document.getElementById("barChart")?.getContext("2d") || 
+                         document.getElementById("barChartCanvas")?.getContext("2d");
+          
           if (!barCtx) {
             console.error("Bar chart canvas not found");
             return;
@@ -2776,8 +2717,7 @@
           barChart = new Chart(barCtx, {
             type: "bar",
             data: {
-              labels:
-                weekLabelTexts.length > 0 ? weekLabelTexts : ["Tidak ada data"],
+              labels: weekLabelTexts.length > 0 ? weekLabelTexts : ["Tidak ada data"],
               datasets: [
                 {
                   label: "Pemasukan",
@@ -2822,8 +2762,8 @@
                 },
                 legend: {
                   display: true,
-                  position: "top",
-                },
+                  position: 'top',
+                }
               },
             },
           });
@@ -2844,10 +2784,9 @@
           const categoryColors = generateColors(categoryLabels.length);
 
           // Pie chart
-          const pieCtx =
-            document.getElementById("pieChart")?.getContext("2d") ||
-            document.getElementById("pieChartCanvas")?.getContext("2d");
-
+          const pieCtx = document.getElementById("pieChart")?.getContext("2d") ||
+                         document.getElementById("pieChartCanvas")?.getContext("2d");
+          
           if (!pieCtx) {
             console.error("Pie chart canvas not found");
             return;
@@ -2891,7 +2830,7 @@
                   position: "bottom",
                   labels: {
                     padding: 20,
-                  },
+                  }
                 },
                 tooltip: {
                   callbacks: {
@@ -3008,24 +2947,12 @@
                             <div class="action-buttons">
                                 <button class="btn-icon" onclick="showEditAccountModal('${
                                   account.id
-                                }')" title="Edit Akun" ${
-              account.id === "default" ? "disabled" : ""
-            }>
+                                }')" title="Edit Akun">
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <button class="btn-icon" onclick="deleteAccount('${
                                   account.id
-                                }')"
-                                        ${
-                                          account.id === "default"
-                                            ? "disabled"
-                                            : ""
-                                        }
-                                        title="${
-                                          account.id === "default"
-                                            ? "Akun default tidak dapat dihapus"
-                                            : "Hapus Akun"
-                                        }">
+                                }')" title="Hapus Akun">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -3178,10 +3105,6 @@
             }
           });
 
-        // Disable delete button for default account
-        document.getElementById("deleteAccountBtn").disabled =
-          account.id === "default";
-
         // Show modal
         showModal("editAccountModal");
       }
@@ -3263,8 +3186,9 @@
 
       // Delete account
       function deleteAccount(accountId) {
-        if (accountId === "default") {
-          showToast("Akun default tidak dapat dihapus!", "error");
+        // Jika ini adalah akun terakhir, jangan izinkan menghapus
+        if (accounts.length <= 1) {
+          showToast("Tidak dapat menghapus akun! Minimal harus ada 1 akun.", "error");
           return;
         }
 
@@ -3302,9 +3226,9 @@
           // Remove transactions for this account
           transactions = transactions.filter((t) => t.account !== accountId);
 
-          // If current account is being deleted, switch to default
+          // If current account is being deleted, switch to first available account
           if (currentAccount === accountId) {
-            currentAccount = "default";
+            currentAccount = accounts[0].id;
             saveCurrentAccountToStorage();
           }
 
@@ -3340,11 +3264,7 @@
           updateDateFilters();
           generateReport();
 
-          showToast(
-            `Beralih ke akun: ${
-              accounts.find((acc) => acc.id === accountId).name
-            }`
-          );
+          showToast(`Beralih ke akun: ${accounts.find(acc => acc.id === accountId).name}`);
         } catch (error) {
           console.error("Error switching account:", error);
           showToast("Terjadi kesalahan saat mengganti akun", "error");
@@ -3756,10 +3676,9 @@
           }
 
           // Update chart
-          const reportCtx =
-            document.getElementById("reportChart")?.getContext("2d") ||
-            document.getElementById("reportChartCanvas")?.getContext("2d");
-
+          const reportCtx = document.getElementById("reportChart")?.getContext("2d") ||
+                            document.getElementById("reportChartCanvas")?.getContext("2d");
+          
           if (!reportCtx) {
             console.error("Report chart canvas not found");
             return;
@@ -3817,8 +3736,8 @@
                 },
                 legend: {
                   display: true,
-                  position: "top",
-                },
+                  position: 'top',
+                }
               },
             },
           });
@@ -3840,8 +3759,7 @@
 
           // Add title
           const reportTitle =
-            document.getElementById("reportTitle")?.textContent ||
-            "Laporan Keuangan";
+            document.getElementById("reportTitle")?.textContent || "Laporan Keuangan";
           doc.setFontSize(18);
           doc.text(reportTitle, 105, 20, { align: "center" });
 
@@ -3897,9 +3815,7 @@
           });
 
           // Save PDF
-          const fileName = `Laporan Keuangan - ${currentAccountName} - ${new Date()
-            .toISOString()
-            .slice(0, 10)}.pdf`;
+          const fileName = `Laporan Keuangan - ${currentAccountName} - ${new Date().toISOString().slice(0, 10)}.pdf`;
           doc.save(fileName);
           showToast("PDF berhasil diekspor!");
         } catch (error) {
